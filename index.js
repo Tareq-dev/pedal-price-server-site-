@@ -24,13 +24,17 @@ async function run() {
   try {
     await client.connect();
     const productCollection = client.db("pedalPrince").collection("products");
+
     // Get API
 
     app.get("/products", async (req, res) => {
+      const user = req.query.email;
+      console.log(user);
       const query = {};
       const cursor = productCollection.find(query);
       const products = await cursor.toArray();
       res.send(products);
+
       // Get API by id
 
       app.get("/products/:id", async (req, res) => {
@@ -46,7 +50,15 @@ async function run() {
         const result = await productCollection.insertOne(newProduct);
         res.send(result);
       });
-      
+
+      // DELETE
+
+      app.delete("/products/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await productCollection.deleteOne(query);
+        res.send(result);
+      });
     });
   } finally {
   }
