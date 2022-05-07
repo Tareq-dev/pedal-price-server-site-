@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const port = process.env.PORT || 4200;
+const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const app = express();
@@ -32,6 +32,8 @@ function verifyJWT(req, res, next) {
 }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.clivt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
+console.log(uri);
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -42,7 +44,7 @@ async function run() {
     await client.connect();
     const productCollection = client.db("pedalPrince").collection("products");
     // Get API
-
+console.log("all route work")
     app.get("/products", async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
