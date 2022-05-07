@@ -14,6 +14,26 @@ app.get("/", (req, res) => {
   res.send("Running Pedal");
 });
 
+// Verify token
+
+function verifyJWT (req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).send({ message: "Unauthorized Access" });
+  }
+  const token = authHeader.split(" ")[1];
+  // console.log(token);
+  jwt.verify(token, process.env.ACCESS_KEY, (err, decoded) => {
+    if (err) {
+      res.status(403).send({ message: "Forbidded access" });
+    }
+    // console.log("decoded", decoded);
+    req.decoded = decoded;
+    next();
+  });
+}
+
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.clivt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -78,6 +98,15 @@ async function run() {
       );
       res.send(result);
     });
+
+    // auth JWT
+   app.post("/login", async (req, res) => {
+     const user = req.body;
+     const accessToken = jwt.sign(user, process.env.ACCESS_KEY, {
+       expiresIn: "1d",
+     });
+     res.send({accessToken});
+   });
   } finally {
   }
 }
