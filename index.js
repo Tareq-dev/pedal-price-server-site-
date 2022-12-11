@@ -31,7 +31,7 @@ function verifyJWT(req, res, next) {
   });
 }
 
-const uri = `mongodb+srv://pedalPrince179:${process.env.DB_PASS}@cluster0.clivt.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://pedalPrince179:HltuEkddldj8hBY1@cluster0.clivt.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
