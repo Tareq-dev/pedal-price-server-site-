@@ -16,20 +16,20 @@ app.get("/", (req, res) => {
 
 // Verify token
 
-function verifyJWT(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).send({ message: "Unauthorized Access" });
-  }
-  const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.ACCESS_KEY, (err, decoded) => {
-    if (err) {
-      res.status(403).send({ message: "Forbidded access" });
-    }
-    req.decoded = decoded;
-    next();
-  });
-}
+// function verifyJWT(req, res, next) {
+//   const authHeader = req.headers.authorization;
+//   if (!authHeader) {
+//     return res.status(401).send({ message: "Unauthorized Access" });
+//   }
+//   const token = authHeader.split(" ")[1];
+//   jwt.verify(token, process.env.ACCESS_KEY, (err, decoded) => {
+//     if (err) {
+//       res.status(403).send({ message: "Forbidded access" });
+//     }
+//     req.decoded = decoded;
+//     next();
+//   });
+// }
 
 const uri = `mongodb+srv://pedalPrince179:HltuEkddldj8hBY1@cluster0.clivt.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -51,7 +51,7 @@ async function run() {
       res.send(products);
     });
 
-    app.get("/myproducts", verifyJWT, async (req, res) => {
+    app.get("/myproducts", async (req, res) => {
       const decodedEmail = req.decoded.email;
       const email = req.query.email;
       if (email === decodedEmail) {
